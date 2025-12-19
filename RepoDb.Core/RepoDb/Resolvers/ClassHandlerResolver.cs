@@ -28,7 +28,6 @@ namespace RepoDb.Resolvers
 
             if (classHandler is not null) return classHandler;
             
-#if NET7_0_OR_GREATER
             var genericAttribute = type.GetCustomAttribute(typeof(ClassHandlerAttribute<>));
             if (genericAttribute is not null)
             {
@@ -38,7 +37,6 @@ namespace RepoDb.Resolvers
 
                 classHandler = Activator.CreateInstance(handlerType);
             }
-#endif
 
             return classHandler ?? ClassHandlerMapper.Get<object>(type);
         }

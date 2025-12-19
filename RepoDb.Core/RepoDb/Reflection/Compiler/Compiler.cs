@@ -504,7 +504,7 @@ namespace RepoDb.Reflection
         /// <returns></returns>
         internal static MethodInfo GetDateTimeTimeOfDayPropertyGetMethod() =>
             GetDateTimeTimeOfDayProperty().GetMethod;
-#if NET6_0_OR_GREATER
+
         /// <summary>
         ///
         /// </summary>
@@ -518,7 +518,6 @@ namespace RepoDb.Reflection
         /// <returns></returns>
         internal static MethodInfo GetDateTimeFromDateOnlyMethod() =>
             StaticType.DateOnly.GetMethod("ToDateTime", new Type[] { StaticType.TimeOnly });
-#endif
 
         /// <summary>
         ///
@@ -572,7 +571,6 @@ namespace RepoDb.Reflection
             return expression;
         }
 
-#if NET6_0_OR_GREATER
         internal static Expression ConvertExpressionToNullableGetValueOrDefaultExpression(Func<Expression, Expression> converter, Expression expression)
         {
             if (Nullable.GetUnderlyingType(expression.Type) != null)
@@ -588,7 +586,6 @@ namespace RepoDb.Reflection
 
             return converter(expression);
         }
-#endif
 
         /// <summary>
         ///
@@ -636,7 +633,7 @@ namespace RepoDb.Reflection
         /// <returns></returns>
         internal static Expression ConvertExpressionToDateTimeToTimeSpanExpression(Expression expression) =>
             ConvertExpressionToNullableValue(ConvertExpressionToDateTimeTimeOfDayExpression(expression));
-#if NET6_0_OR_GREATER
+
         /// <summary>
         ///
         /// </summary>
@@ -652,7 +649,7 @@ namespace RepoDb.Reflection
         /// <returns></returns>
         internal static Expression ConvertExpressionToDateOnlyToDateTimeExpression(Expression expression) =>
             ConvertExpressionToNullableGetValueOrDefaultExpression(ConvertExpressionToDateOnlyFromDateTimeExpression, expression);
-#endif
+
         /// <summary>
         ///
         /// </summary>
@@ -668,7 +665,7 @@ namespace RepoDb.Reflection
         /// <returns></returns>
         internal static Expression ConvertExpressionToDateTimeTimeOfDayExpression(Expression expression) =>
             Expression.Call(expression, GetDateTimeTimeOfDayPropertyGetMethod());
-#if NET6_0_OR_GREATER
+
         /// <summary>
         ///
         /// </summary>
@@ -684,7 +681,7 @@ namespace RepoDb.Reflection
         /// <returns></returns>
         internal static Expression ConvertExpressionToDateTimeFromDateOnlyExpression(Expression expression) =>
             Expression.Call(null, GetDateOnlyFromDateTimeStaticMethod(), expression);
-#endif
+
         /// <summary>
         ///
         /// </summary>
@@ -1029,7 +1026,7 @@ namespace RepoDb.Reflection
             {
                 expression = ConvertExpressionToDateTimeToTimeSpanExpression(expression);
             }
-#if NET6_0_OR_GREATER
+
             // DateTime to DateOnly
             else if (fromType == StaticType.DateTime && toType == StaticType.DateOnly)
             {
@@ -1041,7 +1038,7 @@ namespace RepoDb.Reflection
             {
                 expression = ConvertExpressionToDateOnlyToDateTimeExpression(expression);
             }
-#endif
+
             // Others
             else
             {
@@ -1358,9 +1355,9 @@ namespace RepoDb.Reflection
             var targetTypeUnderlyingType = TypeCache.Get(targetType).GetUnderlyingType();
             var isAutomaticConversion = GlobalConfiguration.Options.ConversionType == ConversionType.Automatic ||
                 targetTypeUnderlyingType == StaticType.TimeSpan ||
-#if NET6_0_OR_GREATER
                 targetTypeUnderlyingType == StaticType.DateOnly ||
-#endif
+                targetTypeUnderlyingType == StaticType.DateTime ||
+
                 /* SQLite: Guid/String (Vice-Versa) : Enforce automatic conversion for the Primary/Identity fields */
                 readerField.DbField?.IsPrimary == true || readerField.DbField?.IsIdentity == true;
 

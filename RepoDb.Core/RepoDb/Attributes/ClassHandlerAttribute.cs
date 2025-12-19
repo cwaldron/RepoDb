@@ -45,7 +45,6 @@ namespace RepoDb.Attributes
         #endregion
     }
     
-#if NET7_0_OR_GREATER
     /// <summary>
     /// An attribute that is used to define a handler for the property transformation.
     /// </summary>
@@ -72,5 +71,4 @@ namespace RepoDb.Attributes
 
         #endregion
     }
-#endif
 }

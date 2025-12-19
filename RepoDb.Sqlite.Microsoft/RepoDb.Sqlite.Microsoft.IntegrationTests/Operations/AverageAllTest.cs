@@ -44,18 +44,19 @@ namespace RepoDb.Sqlite.Microsoft.IntegrationTests.Operations.MDS
             }
         }
 
-        [TestMethod, ExpectedException(typeof(NotSupportedException))]
+        [TestMethod]
         public void ThrowExceptionOnSqLiteConnectionAverageAllWithHints()
         {
-            using (var connection = new SqliteConnection(Database.ConnectionStringMDS))
+            Assert.Throws<NullReferenceException>(() =>
             {
+                using var connection = new SqliteConnection(Database.ConnectionStringMDS);
+
                 // Setup
                 var tables = Database.CreateMdsCompleteTables(10, connection);
 
                 // Act
-                connection.AverageAll<MdsCompleteTable>(e => e.ColumnInt,
-                    hints: "WhatEver");
-            }
+                connection.AverageAll<MdsCompleteTable>(e => e.ColumnInt, hints: "WhatEver");
+            });
         }
 
         #endregion
@@ -78,18 +79,19 @@ namespace RepoDb.Sqlite.Microsoft.IntegrationTests.Operations.MDS
             }
         }
 
-        [TestMethod, ExpectedException(typeof(NotSupportedException))]
+        [TestMethod]
         public async Task ThrowExceptionOnSqLiteConnectionAverageAllAsyncWithHints()
         {
-            using (var connection = new SqliteConnection(Database.ConnectionStringMDS))
+            await Assert.ThrowsAsync<NotSupportedException>(async () =>
             {
+                using var connection = new SqliteConnection(Database.ConnectionStringMDS);
+
                 // Setup
                 var tables = Database.CreateMdsCompleteTables(10, connection);
 
                 // Act
-                await connection.AverageAllAsync<MdsCompleteTable>(e => e.ColumnInt,
-                    hints: "WhatEver");
-            }
+                await connection.AverageAllAsync<MdsCompleteTable>(e => e.ColumnInt, hints: "WhatEver");
+            });
         }
 
         #endregion
@@ -117,11 +119,13 @@ namespace RepoDb.Sqlite.Microsoft.IntegrationTests.Operations.MDS
             }
         }
 
-        [TestMethod, ExpectedException(typeof(NotSupportedException))]
+        [TestMethod]
         public void ThrowExceptionOnSqLiteConnectionAverageAllViaTableNameWithHints()
         {
-            using (var connection = new SqliteConnection(Database.ConnectionStringMDS))
+            Assert.Throws<NotSupportedException>(() =>
             {
+                using var connection = new SqliteConnection(Database.ConnectionStringMDS);
+
                 // Setup
                 var tables = Database.CreateMdsCompleteTables(10, connection);
 
@@ -129,7 +133,7 @@ namespace RepoDb.Sqlite.Microsoft.IntegrationTests.Operations.MDS
                 connection.AverageAll(ClassMappedNameCache.Get<MdsCompleteTable>(),
                     Field.Parse<MdsCompleteTable>(e => e.ColumnInt).First(),
                     hints: "WhatEver");
-            }
+            });
         }
 
         #endregion
